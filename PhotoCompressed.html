@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Manual Passport Crop — Save to chosen folder (optional)</title>
+<style>
+  :root{--blue:#0b84ff}
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:18px;color:#111}
+  h1{font-size:18px;margin:0 0 12px}
+  .row{display:flex;gap:16px;flex-wrap:wrap}
+  .card{border:1px solid #e6e6e6;padding:12px;border-radius:8px;min-width:300px}
+  #frame{width:460px;height:600px;border:1px solid #ddd;position:relative;background:#fafafa;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #img{max-width:100%;max-height:100%;user-select:none;pointer-events:none;position:absolute}
+  .crop{position:absolute;border:2px dashed var(--blue);box-sizing:border-box;cursor:move;display:none}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{background:var(--blue);color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
+  button.alt{background:#eef5ff;color:#03366b}
+  input[type=file]{display:none}
+  .note{font-size:13px;color:#444;margin-top:8px}
+  #outCanvas{border:1px solid #eee;display:block;margin-top:8px;max-width:240px}
+  .small{font-size:13px;color:#444}
+  .helper-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+  input[type=text]{padding:6px;border-radius:6px;border:1px solid #ddd;width:320px}
+  .ok{color:green}
+  .bad{color:red}
+</style>
+</head>
+<body>
+  <h1>Manual Passport Crop — Save to chosen folder (optional)</h1>
+  <div class="row">
+    <div class="card">
+      <strong>Input</strong>
+      <div style="margin-top:8px" class="controls">
+        <button id="loadEmbedded">Load embedded image</button>
+        <button id="pick" class="alt">Choose file</button>
+        <input id="file" type="file" accept="image/*">
+        <button id="clear" class="alt">Reset</button>
+      </div>
+
+      <div id="frame" style="margin-top:12px">
+        <img id="img" alt="image preview">
+        <div id="crop" class="crop"></div>
+      </div>
+
+      <div class="controls" style="margin-top:8px">
+        <label class="small">Aspect</label>
+        <select id="aspect"><option value="7/9">35×45 mm (7:9)</option><option value="free">Free</option></select>
+        <label class="small">Padding %</label><input id="pad" type="number" value="4" min="0" max="50" style="width:70px">
+      </div>
+
+      <div class="controls" style="margin-top:10px">
+        <button id="cropBtn">Crop & Compress</button>
+        <button id="chooseFolder" class="alt">Choose folder</button>
+        <span id="folderStatus" class="small">No folder chosen</span>
+      </div>
+
+      <div class="note">Embedded path used for quick load: <code>/mnt/data/Aditya khartolia.jpg</code></div>
+
+      <div style="margin-top:12px"><strong>Download helpers</strong>
+        <div class="helper-row">
+          <label class="small">Filename (editable):</label>
+          <input id="filenameInput" type="text" placeholder="will use uploaded name" style="width:260px">
+          <button id="copyName" class="alt">Copy name</button>
+        </div>
+        <div class="note">If you pick a folder (Choose folder) the tool will save processed images directly into that folder. Otherwise it will trigger a normal browser download. (GitHub Pages / HTTPS works fine.)</div>
+      </div>
+    </div>
+
+    <div class="card" style="flex:1;min-width:320px">
+      <strong>Output</strong>
+      <div id="status" class="note">Status: idle</div>
+      <canvas id="outCanvas"></canvas>
+      <a id="download" class="download" href="#" download="passport.jpg" style="display:none">Download JPEG</a>
+    </div>
+  </div>
+
+<script>
+// Embedded path (from your environment)
+const EMBEDDED = "/mnt/data/Aditya khartolia.jpg";
+
+// DOM
+const frame = document.getElementById('frame');
+const img = document.getElementById('img');
+const fileInput = document.getElementById('file');
+const loadEmbeddedBtn = document.getElementById('loadEmbedded');
+const pickBtn = document.getElementById('pick');
+const clearBtn = document.getElementById('clear');
+const cropEl = document.getElementById('crop');
+const aspectSel = document.getElementById('aspect');
+const padInput = document.getElementById('pad');
+const cropBtn = document.getElementById('cropBtn');
+const chooseFolderBtn = document.getElementById('chooseFolder');
+const folderStatus = document.getElementById('folderStatus');
+const status = document.getElementById('status');
+const outCanvas = document.getElementById('outCanvas');
+const download = document.getElementById('download');
+const filenameInput = document.getElementById('filenameInput');
+const copyNameBtn = document.getElementById('copyName');
+
+// State
+let imgNaturalW=0,imgNaturalH=0,scale=1,offsetX=0,offsetY=0; let crop=null; let dragging=false,dragMode=null,dragStart=null; let originalFileName=null; let keepDownloadURL=null; let forceDims=false; let forcedW=413,forcedH=531;
+let chosenDirectoryHandle = null; // File System Access API handle (optional)
+
+// load image helper
+function loadImageUrl(url, revoke=false, name=null){
+  return new Promise((res,rej)=>{
+    const I=new Image(); I.crossOrigin='anonymous';
+    I.onload = ()=>{
+      imgNaturalW = I.naturalWidth; imgNaturalH = I.naturalHeight;
+      img.src = url; img.style.display='block';
+      const fw = frame.clientWidth, fh = frame.clientHeight;
+      scale = Math.min(fw / imgNaturalW, fh / imgNaturalH);
+      const dispW = imgNaturalW * scale, dispH = imgNaturalH * scale;
+      offsetX = (fw - dispW) / 2; offsetY = (fh - dispH) / 2;
+      img.style.width = dispW + 'px'; img.style.height = dispH + 'px';
+      img.style.left = offsetX + 'px'; img.style.top = offsetY + 'px';
+      if(name) originalFileName = name;
+      else if(!originalFileName) try{ originalFileName = url.split('/').pop(); }catch(e){}
+      filenameInput.value = originalFileName || '';
+      res(I);
+      if(revoke) setTimeout(()=> URL.revokeObjectURL(url), 4000);
+    };
+    I.onerror = ()=> rej(new Error('Failed to load image'));
+    I.src = url;
+  });
+}
+
+// UI wiring
+loadEmbeddedBtn.addEventListener('click', ()=>{ status.textContent='Loading embedded...'; loadImageUrl(EMBEDDED, false, EMBEDDED.split('/').pop()).then(()=> status.textContent='Loaded embedded. Draw crop.').catch(()=> status.textContent='Embedded not accessible — use Choose file.'); });
+pickBtn.addEventListener('click', ()=> fileInput.click());
+fileInput.addEventListener('change', (e)=>{ const f = e.target.files && e.target.files[0]; if(!f) return; originalFileName = f.name; filenameInput.value = f.name; const url = URL.createObjectURL(f); loadImageUrl(url, true, f.name).then(()=> status.textContent='Loaded file. Draw crop.').catch(()=> status.textContent='Failed to load'); });
+
+// Choose folder using File System Access API
+chooseFolderBtn.addEventListener('click', async ()=>{
+  if(!window.showDirectoryPicker){
+    alert('Your browser does not support folder saving (showDirectoryPicker). Use Chrome/Edge or run locally via localhost.');
+    return;
+  }
+  try{
+    chosenDirectoryHandle = await window.showDirectoryPicker();
+    folderStatus.textContent = 'Folder selected: ' + (chosenDirectoryHandle.name || 'selected');
+    folderStatus.className = 'small ok';
+  }catch(err){
+    console.error('choose folder cancelled or failed', err);
+    folderStatus.textContent = 'No folder chosen'; folderStatus.className='small bad';
+  }
+});
+
+// Basic crop draw & move
+function toImageCoords(clientX, clientY){ const fr = frame.getBoundingClientRect(); const px = clientX - fr.left; const py = clientY - fr.top; const ix = (px - offsetX) / scale; const iy = (py - offsetY) / scale; return {px,py,ix,iy}; }
+frame.addEventListener('pointerdown', (e)=>{ if(!img.src) return; e.preventDefault(); const {ix,iy} = toImageCoords(e.clientX,e.clientY); if(crop && ix>=crop.x && ix<=crop.x+crop.w && iy>=crop.y && iy<=crop.y+crop.h){ dragging=true; dragMode='move'; dragStart={px:e.clientX,py:e.clientY,ox:crop.x,oy:crop.y}; } else { dragging=true; dragMode='create'; dragStart={sx:ix,sy:iy}; crop={x:Math.max(0,Math.floor(ix)), y:Math.max(0,Math.floor(iy)), w:2, h:2}; updateCrop(); } });
+window.addEventListener('pointermove', (e)=>{ if(!dragging||!img.src) return; e.preventDefault(); const {ix} = toImageCoords(e.clientX,e.clientY); const aspect = aspectSel.value; if(dragMode==='create'){ let x0 = dragStart.sx; let w = Math.abs(ix - x0); let h = w * (9/7); if(aspect==='free') h = Math.abs(toImageCoords(e.clientX,e.clientY).iy - dragStart.sy); const cx = ix < x0 ? x0 - w : x0; const cy = dragStart.sy < toImageCoords(e.clientX,e.clientY).iy ? dragStart.sy : toImageCoords(e.clientX,e.clientY).iy; crop = {x: Math.max(0,Math.floor(cx)), y: Math.max(0,Math.floor(cy)), w: Math.max(2,Math.floor(w)), h: Math.max(2,Math.floor(h))}; updateCrop(); } else if(dragMode==='move'){ const deltaX = (e.clientX - dragStart.px) / scale; const deltaY = (e.clientY - dragStart.py) / scale; crop.x = Math.max(0, Math.min(imgNaturalW - crop.w, Math.round(dragStart.ox + deltaX))); crop.y = Math.max(0, Math.min(imgNaturalH - crop.h, Math.round(dragStart.oy + deltaY))); updateCrop(); } });
+window.addEventListener('pointerup', ()=>{ dragging=false; dragMode=null; dragStart=null; });
+function updateCrop(){ if(!crop||!img.src){ cropEl.style.display='none'; return; } const left = Math.round(offsetX + crop.x * scale); const top = Math.round(offsetY + crop.y * scale); const w = Math.round(crop.w * scale); const h = Math.round(crop.h * scale); cropEl.style.left = left + 'px'; cropEl.style.top = top + 'px'; cropEl.style.width = Math.max(12, w) + 'px'; cropEl.style.height = Math.max(12, h) + 'px'; cropEl.style.display = 'block'; }
+
+// Crop & compress and save either to chosen folder or download
+cropBtn.addEventListener('click', async ()=>{
+  if(!img.src || !crop) return alert('Load image and draw crop');
+  status.textContent = 'Processing...';
+  let outW = crop.w, outH = crop.h; if(forceDims){ outW = forcedW; outH = forcedH; }
+  const tmp = document.createElement('canvas'); tmp.width = outW; tmp.height = outH; const ctx = tmp.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,outW,outH); ctx.drawImage(img, crop.x, crop.y, crop.w, crop.h, 0, 0, outW, outH);
+  const minBytes = 40*1024, maxBytes = 45*1024; let best = await tryCompress(tmp, minBytes, maxBytes);
+  if(!best){ let scaleFactor = 0.92; for(let i=0;i<5;i++){ const sw = Math.max(1, Math.round(outW * scaleFactor)); const sh = Math.max(1, Math.round(outH * scaleFactor)); const tmp2 = document.createElement('canvas'); tmp2.width = sw; tmp2.height = sh; const c2 = tmp2.getContext('2d'); c2.fillStyle='#fff'; c2.fillRect(0,0,sw,sh); c2.drawImage(tmp,0,0,outW,outH,0,0,sw,sh); best = await tryCompress(tmp2, minBytes, maxBytes); if(best) break; scaleFactor *= 0.9; } }
+  if(!best) best = await canvasToBlob(tmp, 'image/jpeg', 0.72);
+
+  // determine filename
+  let name = filenameInput.value && filenameInput.value.trim() ? filenameInput.value.trim() : (originalFileName || 'passport.jpg');
+  if(!/\.[^/.]+$/.test(name)) name = name + '.jpg'; else name = name.replace(/\.[^.]+$/, '.jpg');
+
+  // Save to chosen folder if available (File System Access API)
+  if(chosenDirectoryHandle){
+    try{
+      const ok = await saveBlobToChosenFolder(best, name);
+      if(ok){ status.textContent = `Saved to folder: ${name}`; }
+      else { status.textContent = 'Failed to save to folder — fallback to download.'; fallbackDownload(best, name); }
+    }catch(err){ console.error('save to folder failed', err); status.textContent = 'Save failed — fallback to download.'; fallbackDownload(best, name); }
+  } else {
+    // fallback to normal download
+    fallbackDownload(best, name);
+  }
+});
+
+// Save blob to chosen folder using File System Access API
+async function saveBlobToChosenFolder(blob, filename){
+  if(!chosenDirectoryHandle) return false;
+  try{
+    const fileHandle = await chosenDirectoryHandle.getFileHandle(filename, { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return true;
+  }catch(err){ console.error('write failed', err); return false; }
+}
+
+// fallback: create download link
+function fallbackDownload(blob, filename){
+  const url = URL.createObjectURL(blob);
+  if(keepDownloadURL) URL.revokeObjectURL(keepDownloadURL);
+  keepDownloadURL = url;
+  download.href = url; download.download = filename; download.style.display='inline-block'; download.textContent = `Download — ${(blob.size/1024).toFixed(1)} KB`;
+  // also preview on canvas
+  const outImg = new Image(); outImg.onload = ()=>{ outCanvas.width = outImg.naturalWidth; outCanvas.height = outImg.naturalHeight; const ctxo = outCanvas.getContext('2d'); ctxo.fillStyle='#fff'; ctxo.fillRect(0,0,outCanvas.width,outCanvas.height); ctxo.drawImage(outImg,0,0); }; outImg.src = url;
+}
+
+// helper compress
+function canvasToBlob(c,m,q){ return new Promise(res => c.toBlob(b => res(b), m, q)); }
+async function tryCompress(cnv,minB,maxB){ let lo=0.28, hi=0.95, best=null; for(let i=0;i<10;i++){ const q=(lo+hi)/2; const b = await canvasToBlob(cnv,'image/jpeg',q); if(!b) break; if(b.size>=minB && b.size<=maxB) return b; if(b.size<=maxB){ if(!best || b.size>best.size) best=b; lo=q; } else hi=q; } return best; }
+
+// copy name to clipboard
+copyNameBtn.addEventListener('click', async ()=>{ const name = filenameInput.value && filenameInput.value.trim() ? filenameInput.value.trim() : (originalFileName || 'passport.jpg'); try{ await navigator.clipboard.writeText(name); alert('Filename copied to clipboard'); }catch(e){ prompt('Copy this filename manually:', name); } });
+
+// drag & drop to load
+frame.addEventListener('dragover', e=>{ e.preventDefault(); frame.style.outline='2px dashed #0b84ff'; }); frame.addEventListener('dragleave', e=>{ e.preventDefault(); frame.style.outline='none'; }); frame.addEventListener('drop', e=>{ e.preventDefault(); frame.style.outline='none'; const f = e.dataTransfer.files && e.dataTransfer.files[0]; if(f){ originalFileName = f.name; filenameInput.value = f.name; const u = URL.createObjectURL(f); loadImageUrl(u, true, f.name).then(()=> status.textContent='Loaded file. Draw crop.').catch(()=> status.textContent='Failed to load'); } });
+
+// auto-load embedded when page opens
+window.addEventListener('load', ()=>{ setTimeout(()=>{ loadImageUrl(EMBEDDED, false, EMBEDDED.split('/').pop()).then(()=> status.textContent='Embedded loaded; draw crop.').catch(()=> status.textContent='Embedded not accessible — use Choose file.'); }, 300); });
+
+</script>
+</body>
+</html>
