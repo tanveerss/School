@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS GT Reading – Full Mock Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d5a3d;
+    --green-light: #4a8c5c;
+    --cream: #f5f0e8;
+    --cream-dark: #e8e0cc;
+    --gold: #c8a84b;
+    --text: #1c1c1c;
+    --text-muted: #5a5a5a;
+    --border: #c8c0aa;
+    --correct: #2d7a3d;
+    --incorrect: #c0392b;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--green-dark);
+    color: var(--cream);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+  }
+  .header-title span { color: var(--gold); }
+  .timer-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+  }
+  .timer-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  #timer { font-family: 'Merriweather', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold); min-width: 60px; }
+  #timer.urgent { color: #ff6b6b; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.1);
+    height: 4px;
+    width: 100%;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.5s ease;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* SECTION TABS */
+  .section-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    background: var(--cream-dark);
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .tab-btn.active {
+    background: var(--green-dark);
+    color: var(--cream);
+    box-shadow: 0 2px 8px rgba(26,58,42,0.3);
+  }
+  .tab-btn.completed { border: 2px solid var(--green-light); color: var(--green-dark); font-weight: 600; }
+  .tab-btn.active.completed { background: var(--green-mid); border-color: transparent; color: var(--cream); }
+
+  /* SECTION PANEL */
+  .section-panel { display: none; }
+  .section-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+  .section-header {
+    background: var(--green-dark);
+    color: var(--cream);
+    padding: 20px 28px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 0;
+  }
+  .section-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 4px; }
+  .section-subtitle { font-size: 0.85rem; opacity: 0.75; }
+
+  .section-body {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  /* PASSAGE */
+  .passage-box {
+    background: var(--cream);
+    border-left: 4px solid var(--green-light);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    font-family: 'Merriweather', serif;
+    font-size: 0.93rem;
+    line-height: 1.9;
+    color: #222;
+  }
+  .passage-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .passage-box .passage-label {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    background: var(--green-dark);
+    color: var(--cream);
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .passage-box p { margin-bottom: 14px; }
+  .passage-box p:last-child { margin-bottom: 0; }
+
+  /* TEXT A/B/C tags */
+  .text-sep {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    background: var(--green-dark);
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 4px;
+    margin: 16px 0 10px;
+  }
+
+  /* INSTRUCTION BOX */
+  .instruction-box {
+    background: #e8f4ec;
+    border: 1px solid #b0d4bb;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    color: var(--green-dark);
+  }
+  .instruction-box strong { display: block; margin-bottom: 4px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* QUESTIONS */
+  .questions-wrap { margin-top: 8px; }
+
+  .question-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .question-item:last-child { border-bottom: none; }
+
+  .q-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--green-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-family: 'Merriweather', serif;
+    font-size: 0.91rem;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    color: #222;
+  }
+
+  /* RADIO / CHECKBOX */
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 9px 14px;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    font-size: 0.88rem;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .option-label:hover { border-color: var(--green-light); background: #e8f4ec; }
+  .option-label input { margin-top: 2px; accent-color: var(--green-mid); flex-shrink: 0; }
+  .option-label.selected { border-color: var(--green-mid); background: #ddf0e4; }
+  .option-label.correct-ans { border-color: var(--correct); background: #d4edda; font-weight: 600; }
+  .option-label.wrong-ans { border-color: var(--incorrect); background: #fde8e6; }
+
+  /* TEXT INPUT */
+  .text-input {
+    width: 100%;
+    max-width: 340px;
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    background: var(--cream);
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .text-input:focus { outline: none; border-color: var(--green-mid); background: white; }
+  .text-input.correct-ans { border-color: var(--correct); background: #d4edda; }
+  .text-input.wrong-ans { border-color: var(--incorrect); background: #fde8e6; }
+
+  /* TFNG */
+  .tfng-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tfng-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+  .tfng-btn:hover { border-color: var(--green-mid); background: #e8f4ec; }
+  .tfng-btn.selected { background: var(--green-mid); color: white; border-color: var(--green-mid); }
+  .tfng-btn.correct-ans { background: var(--correct); color: white; border-color: var(--correct); }
+  .tfng-btn.wrong-ans { background: var(--incorrect); color: white; border-color: var(--incorrect); }
+
+  /* FEEDBACK */
+  .feedback-box {
+    margin-top: 10px;
+    font-size: 0.83rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct { background: #d4edda; color: #1a5c2a; border: 1px solid #b0d4bb; }
+  .feedback-box.incorrect { background: #fde8e6; color: #7a1c1c; border: 1px solid #f0b0a8; }
+
+  /* NAVIGATION */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary { background: var(--green-dark); color: var(--cream); }
+  .btn-primary:hover { background: var(--green-mid); }
+  .btn-secondary { background: transparent; color: var(--green-dark); border: 2px solid var(--green-dark); }
+  .btn-secondary:hover { background: var(--green-dark); color: var(--cream); }
+  .btn-gold { background: var(--gold); color: var(--green-dark); }
+  .btn-gold:hover { background: #b8982a; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* SCORE CARD */
+  #score-screen {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  .score-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .score-header {
+    background: var(--green-dark);
+    padding: 36px 32px;
+    text-align: center;
+    color: var(--cream);
+  }
+  .score-header h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 8px; }
+  .score-header p { opacity: 0.75; font-size: 0.95rem; }
+  .big-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--gold);
+    display: block;
+    margin: 12px 0 4px;
+  }
+  .band-score {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 6px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+  }
+  .score-body { padding: 28px 32px; }
+  .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+  .score-cell {
+    text-align: center;
+    padding: 16px;
+    background: var(--cream);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .score-cell .sc-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--green-dark); }
+  .score-cell .sc-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .answer-key { margin-top: 20px; }
+  .answer-key h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--green-dark); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--cream-dark); }
+  .ak-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .ak-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .ak-item.ak-correct { background: #d4edda; }
+  .ak-item.ak-incorrect { background: #fde8e6; }
+  .ak-q { font-weight: 700; color: var(--text-muted); min-width: 24px; font-size: 0.78rem; }
+  .ak-ans { font-weight: 600; color: var(--green-dark); }
+  .ak-user { color: var(--incorrect); font-size: 0.78rem; }
+
+  /* RESPONSIVE */
+  @media(max-width:600px) {
+    .section-tabs { flex-direction: column; }
+    .score-grid { grid-template-columns: repeat(2,1fr); }
+    .header-title { font-size: 1rem; }
+    #timer { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">IELTS <span>General Training</span> Reading – Mock Test</div>
+    <div class="timer-box">
+      <div>
+        <div class="timer-label">Time Left</div>
+        <div id="timer">60:00</div>
+      </div>
+      <button class="btn btn-gold" id="submit-all-btn" style="padding:8px 16px;font-size:0.82rem;" onclick="submitAll()">Submit Test</button>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</header>
+
+<div class="container">
+
+  <!-- SECTION TABS -->
+  <div class="section-tabs">
+    <button class="tab-btn active" id="tab1" onclick="switchSection(1)">Section 1<br><small>Q 1–14</small></button>
+    <button class="tab-btn" id="tab2" onclick="switchSection(2)">Section 2<br><small>Q 15–27</small></button>
+    <button class="tab-btn" id="tab3" onclick="switchSection(3)">Section 3<br><small>Q 28–40</small></button>
+  </div>
+
+  <!-- ===================== SECTION 1 ===================== -->
+  <div class="section-panel active" id="panel1">
+    <div class="section-header">
+      <div class="section-badge">Section 1 · Social Survival</div>
+      <div class="section-title">Real Garden Park – Visitor Information</div>
+      <div class="section-subtitle">Read the texts and answer Questions 1–14 · Everyday / social context</div>
+    </div>
+    <div class="section-body">
+
+      <div class="passage-box">
+        <div class="passage-label">Text A</div>
+        <h3>Real Garden Park – General Visitor Information</h3>
+        <p>Real Garden Park is one of the city's most beloved green spaces, covering over 45 hectares of landscaped gardens, woodland walks, and ornamental water features. The park is open to the public <strong>every day of the year</strong>, including public holidays, from <strong>6:00 am to 9:00 pm</strong> during summer months (April–September) and from <strong>7:00 am to 6:00 pm</strong> during winter months (October–March).</p>
+        <p>Admission to the park is <strong>free of charge</strong> for all visitors. However, entry to the Botanical Glasshouse and the Heritage Rose Collection requires a ticket, available at the park's main entrance kiosk or online. Adult tickets cost £6.50 and concession tickets (for students, seniors aged 60+, and registered disabled visitors) cost £4.00. Children under 12 are admitted free when accompanied by a paying adult.</p>
+        <p>Dogs are welcome in most areas of the park but must be kept on a lead at all times in the Sensory Garden and the Children's Play Zone. Dog waste bags are available free of charge at all four park entrances. <strong>Please note: dogs are not permitted in the Botanical Glasshouse or the café seating area.</strong></p>
+        <p>Cycling is permitted along designated cycle tracks only. Cyclists must give way to pedestrians at all times. Cycling is prohibited in the formal garden areas, on pathways adjacent to the pond, and within 50 metres of any children's play equipment.</p>
+
+        <div class="text-sep">Text B</div>
+        <h3>Real Garden Park – Upcoming Events & Activities</h3>
+        <p><strong>Saturday Garden Walks (Every Saturday, 10:00 am – 11:30 am)</strong><br>
+        Join our qualified horticulturists for a free guided walk around the park's seasonal highlights. No booking required. Meet at the Clock Tower near the South Gate. Suitable for all ages. Walks take place in all weather conditions.</p>
+
+        <p><strong>Junior Gardeners Club (Every Sunday, 2:00 pm – 4:00 pm)</strong><br>
+        A hands-on gardening programme for children aged 5–12. Activities include planting, composting, and wildlife identification. Places are limited to 15 children per session. Pre-booking is essential and can be done via the park website. A small materials fee of £2 per child per session applies.</p>
+
+        <p><strong>Sunset Yoga in the Park (Fridays, June–August, 6:30 pm – 7:30 pm)</strong><br>
+        Outdoor yoga sessions held on the Great Lawn. Suitable for beginners and experienced practitioners. Participants should bring their own mat. Cost: £8 per session or £50 for the full summer season pass (10 sessions). Book online at the park website.</p>
+
+        <p><strong>Photography Exhibition: "A Year in the Garden" (Now – 30th September)</strong><br>
+        An outdoor display of 60 large-format photographs taken throughout the seasons at Real Garden Park. Free admission. Displayed along the Central Promenade between the fountain and the heritage bridge.</p>
+      </div>
+
+      <!-- QUESTIONS 1–6: Matching -->
+      <div class="instruction-box">
+        <strong>Questions 1–6 · Matching</strong>
+        Look at the list of activities and features (A–H) below. Match each statement (Questions 1–6) with the correct activity or feature. Write the correct letter in the boxes. <em>You may use any letter more than once.</em>
+      </div>
+
+      <div class="passage-box" style="font-size:0.88rem;padding:14px 18px;">
+        <strong>List of Activities / Features</strong><br>
+        <strong>A</strong> Saturday Garden Walks &nbsp;|&nbsp; <strong>B</strong> Junior Gardeners Club &nbsp;|&nbsp; <strong>C</strong> Sunset Yoga &nbsp;|&nbsp; <strong>D</strong> Photography Exhibition &nbsp;|&nbsp; <strong>E</strong> Botanical Glasshouse &nbsp;|&nbsp; <strong>F</strong> Sensory Garden &nbsp;|&nbsp; <strong>G</strong> Café seating area &nbsp;|&nbsp; <strong>H</strong> Cycling tracks
+      </div>
+
+      <div class="questions-wrap">
+        <!-- Q1 -->
+        <div class="question-item" id="qi1">
+          <div class="q-label">Question 1</div>
+          <div class="q-text">Dogs are not allowed in this area.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q1" value="A"> A – Saturday Garden Walks</label>
+            <label class="option-label"><input type="radio" name="q1" value="E"> E – Botanical Glasshouse</label>
+            <label class="option-label"><input type="radio" name="q1" value="F"> F – Sensory Garden</label>
+            <label class="option-label"><input type="radio" name="q1" value="H"> H – Cycling tracks</label>
+          </div>
+          <div class="feedback-box" id="fb1"></div>
+        </div>
+        <!-- Q2 -->
+        <div class="question-item" id="qi2">
+          <div class="q-label">Question 2</div>
+          <div class="q-text">Participants must bring their own equipment.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q2" value="A"> A – Saturday Garden Walks</label>
+            <label class="option-label"><input type="radio" name="q2" value="B"> B – Junior Gardeners Club</label>
+            <label class="option-label"><input type="radio" name="q2" value="C"> C – Sunset Yoga</label>
+            <label class="option-label"><input type="radio" name="q2" value="D"> D – Photography Exhibition</label>
+          </div>
+          <div class="feedback-box" id="fb2"></div>
+        </div>
+        <!-- Q3 -->
+        <div class="question-item" id="qi3">
+          <div class="q-label">Question 3</div>
+          <div class="q-text">There is a charge for children to take part in this activity.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q3" value="A"> A – Saturday Garden Walks</label>
+            <label class="option-label"><input type="radio" name="q3" value="B"> B – Junior Gardeners Club</label>
+            <label class="option-label"><input type="radio" name="q3" value="C"> C – Sunset Yoga</label>
+            <label class="option-label"><input type="radio" name="q3" value="D"> D – Photography Exhibition</label>
+          </div>
+          <div class="feedback-box" id="fb3"></div>
+        </div>
+        <!-- Q4 -->
+        <div class="question-item" id="qi4">
+          <div class="q-label">Question 4</div>
+          <div class="q-text">This activity runs regardless of the weather.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q4" value="A"> A – Saturday Garden Walks</label>
+            <label class="option-label"><input type="radio" name="q4" value="B"> B – Junior Gardeners Club</label>
+            <label class="option-label"><input type="radio" name="q4" value="C"> C – Sunset Yoga</label>
+            <label class="option-label"><input type="radio" name="q4" value="D"> D – Photography Exhibition</label>
+          </div>
+          <div class="feedback-box" id="fb4"></div>
+        </div>
+        <!-- Q5 -->
+        <div class="question-item" id="qi5">
+          <div class="q-label">Question 5</div>
+          <div class="q-text">Advance reservation is required for this activity.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q5" value="A"> A – Saturday Garden Walks</label>
+            <label class="option-label"><input type="radio" name="q5" value="B"> B – Junior Gardeners Club</label>
+            <label class="option-label"><input type="radio" name="q5" value="C"> C – Sunset Yoga</label>
+            <label class="option-label"><input type="radio" name="q5" value="D"> D – Photography Exhibition</label>
+          </div>
+          <div class="feedback-box" id="fb5"></div>
+        </div>
+        <!-- Q6 -->
+        <div class="question-item" id="qi6">
+          <div class="q-label">Question 6</div>
+          <div class="q-text">Visitors need a ticket to enter this area.</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q6" value="D"> D – Photography Exhibition</label>
+            <label class="option-label"><input type="radio" name="q6" value="E"> E – Botanical Glasshouse</label>
+            <label class="option-label"><input type="radio" name="q6" value="F"> F – Sensory Garden</label>
+            <label class="option-label"><input type="radio" name="q6" value="H"> H – Cycling tracks</label>
+          </div>
+          <div class="feedback-box" id="fb6"></div>
+        </div>
+      </div>
+
+      <!-- QUESTIONS 7–14: TRUE/FALSE/NOT GIVEN -->
+      <div class="instruction-box" style="margin-top:28px;">
+        <strong>Questions 7–14 · True / False / Not Given</strong>
+        Do the following statements agree with the information in the texts? Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if it contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.
+      </div>
+
+      <div class="questions-wrap">
+        <!-- Q7 -->
+        <div class="question-item" id="qi7">
+          <div class="q-label">Question 7</div>
+          <div class="q-text">Real Garden Park is closed on public holidays.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="7" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="7" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="7" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb7"></div>
+        </div>
+        <!-- Q8 -->
+        <div class="question-item" id="qi8">
+          <div class="q-label">Question 8</div>
+          <div class="q-text">Students can get a reduced price ticket to the Botanical Glasshouse.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="8" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="8" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="8" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb8"></div>
+        </div>
+        <!-- Q9 -->
+        <div class="question-item" id="qi9">
+          <div class="q-label">Question 9</div>
+          <div class="q-text">Visitors can purchase dog waste bags inside the park's café.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="9" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="9" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="9" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb9"></div>
+        </div>
+        <!-- Q10 -->
+        <div class="question-item" id="qi10">
+          <div class="q-label">Question 10</div>
+          <div class="q-text">Cyclists must stop completely before reaching pedestrian pathways.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="10" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="10" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="10" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb10"></div>
+        </div>
+        <!-- Q11 -->
+        <div class="question-item" id="qi11">
+          <div class="q-label">Question 11</div>
+          <div class="q-text">The Junior Gardeners Club can accept a maximum of 15 children per session.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="11" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="11" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="11" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb11"></div>
+        </div>
+        <!-- Q12 -->
+        <div class="question-item" id="qi12">
+          <div class="q-label">Question 12</div>
+          <div class="q-text">The Saturday Garden Walks are led by professionally trained staff.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="12" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="12" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="12" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb12"></div>
+        </div>
+        <!-- Q13 -->
+        <div class="question-item" id="qi13">
+          <div class="q-label">Question 13</div>
+          <div class="q-text">The Photography Exhibition charges a small entry fee on weekends.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="13" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="13" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="13" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb13"></div>
+        </div>
+        <!-- Q14 -->
+        <div class="question-item" id="qi14">
+          <div class="q-label">Question 14</div>
+          <div class="q-text">Children aged 12 and under can attend the Botanical Glasshouse without paying if with an adult.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="14" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="14" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="14" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb14"></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <div></div>
+        <button class="btn btn-primary" onclick="switchSection(2)">Next: Section 2 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 2 ===================== -->
+  <div class="section-panel" id="panel2">
+    <div class="section-header">
+      <div class="section-badge">Section 2 · Workplace Survival</div>
+      <div class="section-title">Staff Information – Real Garden Park</div>
+      <div class="section-subtitle">Read the texts and answer Questions 15–27 · Workplace context</div>
+    </div>
+    <div class="section-body">
+
+      <div class="passage-box">
+        <div class="passage-label">Text A – Staff Induction Handbook (Extract)</div>
+        <h3>Welcome to the Real Garden Park Team</h3>
+        <p>As a member of staff at Real Garden Park, you are expected to uphold the park's values of accessibility, environmental stewardship, and outstanding visitor experience. All new employees must complete a mandatory two-day induction programme before commencing any public-facing duties. During this induction, you will receive training in park safety procedures, visitor engagement, and first aid basics.</p>
+        <p><strong>Working Hours and Shifts:</strong> The park operates on a rota system. Shift patterns are issued four weeks in advance and posted on the staff portal. If you are unable to attend a shift, you must notify your line manager at least 48 hours in advance, except in cases of genuine emergency. Failure to do so may result in a formal warning under the park's attendance management policy.</p>
+        <p><strong>Uniforms:</strong> All customer-facing staff must wear the park uniform (green polo shirt, black trousers/skirt, and name badge) during all working hours. Uniforms are provided free of charge for the first two years of employment. After two years, replacement items are available at a subsidised rate through the HR department. Personal modifications to the uniform (including badges, pins, or accessories) are not permitted unless medically necessary.</p>
+        <p><strong>Breaks:</strong> Staff working a shift of 4 hours or more are entitled to one 20-minute paid break. Staff working 7 hours or more are entitled to one 20-minute paid break and one 30-minute unpaid lunch break. Break times are coordinated by the shift supervisor to ensure adequate coverage at all times.</p>
+
+        <div class="text-sep">Text B – Staff Notice</div>
+        <h3>End-of-Season Staff Review & Training Day – Important Notice</h3>
+        <p>All permanent and seasonal staff are required to attend the annual End-of-Season Review and Training Day on <strong>Saturday, 5th October</strong>. The event will be held at the Park Visitor Centre from <strong>9:00 am to 4:30 pm</strong>.</p>
+        <p>The morning session (9:00 am – 12:30 pm) will include a review of visitor feedback, departmental performance updates, and a presentation from the Park Director on plans for the upcoming season. Attendance at the morning session is <strong>compulsory for all staff</strong>.</p>
+        <p>The afternoon session (1:30 pm – 4:30 pm) will consist of three optional workshops: Advanced Plant Care, Visitor Accessibility Training, and Digital Communication for Park Staff. Staff should pre-select their preferred workshop via the staff portal by <strong>25th September</strong>. Places are allocated on a first-come, first-served basis.</p>
+        <p>Lunch will be provided free of charge between 12:30 pm and 1:30 pm. Staff who travel more than 15 miles to attend may claim travel expenses through the Finance Department within 14 days of the event. Claims submitted after this period will not be processed.</p>
+        <p>Please note that the park will be closed to the public on this date. Skeleton staff for essential maintenance will be arranged separately by department heads.</p>
+      </div>
+
+      <!-- Q15–21: Sentence Completion -->
+      <div class="instruction-box">
+        <strong>Questions 15–21 · Sentence Completion</strong>
+        Complete the sentences below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the text for each answer.
+      </div>
+
+      <div class="questions-wrap">
+        <div class="question-item" id="qi15">
+          <div class="q-label">Question 15</div>
+          <div class="q-text">Before starting any public-facing role, new staff must finish a ______________ induction programme.</div>
+          <input type="text" class="text-input" id="ans15" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb15"></div>
+        </div>
+        <div class="question-item" id="qi16">
+          <div class="q-label">Question 16</div>
+          <div class="q-text">Staff who cannot come to a shift must tell their line manager at least ______________ in advance, unless there is a genuine emergency.</div>
+          <input type="text" class="text-input" id="ans16" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb16"></div>
+        </div>
+        <div class="question-item" id="qi17">
+          <div class="q-label">Question 17</div>
+          <div class="q-text">Uniforms are supplied at no cost during the first ______________ of employment.</div>
+          <input type="text" class="text-input" id="ans17" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb17"></div>
+        </div>
+        <div class="question-item" id="qi18">
+          <div class="q-label">Question 18</div>
+          <div class="q-text">Staff working a shift of seven hours or more are entitled to both a paid break and an unpaid ______________ break.</div>
+          <input type="text" class="text-input" id="ans18" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb18"></div>
+        </div>
+        <div class="question-item" id="qi19">
+          <div class="q-label">Question 19</div>
+          <div class="q-text">The morning session of the Training Day is ______________ for every member of staff.</div>
+          <input type="text" class="text-input" id="ans19" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb19"></div>
+        </div>
+        <div class="question-item" id="qi20">
+          <div class="q-label">Question 20</div>
+          <div class="q-text">Workshop places in the afternoon session are given on a ______________ basis.</div>
+          <input type="text" class="text-input" id="ans20" placeholder="max 3 words...">
+          <div class="feedback-box" id="fb20"></div>
+        </div>
+        <div class="question-item" id="qi21">
+          <div class="q-label">Question 21</div>
+          <div class="q-text">Staff who travel more than ______________ to the Training Day can apply for travel expenses.</div>
+          <input type="text" class="text-input" id="ans21" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb21"></div>
+        </div>
+      </div>
+
+      <!-- Q22–27: TRUE/FALSE/NOT GIVEN -->
+      <div class="instruction-box" style="margin-top:28px;">
+        <strong>Questions 22–27 · True / False / Not Given</strong>
+        Do the following statements agree with the information in the texts?
+      </div>
+      <div class="questions-wrap">
+        <div class="question-item" id="qi22">
+          <div class="q-label">Question 22</div>
+          <div class="q-text">Staff are notified of their shift pattern one month in advance.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="22" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="22" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="22" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb22"></div>
+        </div>
+        <div class="question-item" id="qi23">
+          <div class="q-label">Question 23</div>
+          <div class="q-text">Staff may add personal accessories to their uniform if they obtain permission from their manager.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="23" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="23" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="23" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb23"></div>
+        </div>
+        <div class="question-item" id="qi24">
+          <div class="q-label">Question 24</div>
+          <div class="q-text">The park will remain open to visitors on the day of the Training Day event.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="24" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="24" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="24" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb24"></div>
+        </div>
+        <div class="question-item" id="qi25">
+          <div class="q-label">Question 25</div>
+          <div class="q-text">Staff must choose their preferred afternoon workshop before 25th September.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="25" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="25" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="25" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb25"></div>
+        </div>
+        <div class="question-item" id="qi26">
+          <div class="q-label">Question 26</div>
+          <div class="q-text">Travel expenses claims submitted more than two weeks after the event will be rejected.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="26" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="26" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="26" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb26"></div>
+        </div>
+        <div class="question-item" id="qi27">
+          <div class="q-label">Question 27</div>
+          <div class="q-text">The Park Director will speak during the afternoon workshop session.</div>
+          <div class="tfng-group">
+            <button class="tfng-btn" data-q="27" data-v="TRUE" onclick="selectTFNG(this)">TRUE</button>
+            <button class="tfng-btn" data-q="27" data-v="FALSE" onclick="selectTFNG(this)">FALSE</button>
+            <button class="tfng-btn" data-q="27" data-v="NOT GIVEN" onclick="selectTFNG(this)">NOT GIVEN</button>
+          </div>
+          <div class="feedback-box" id="fb27"></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="switchSection(1)">← Back: Section 1</button>
+        <button class="btn btn-primary" onclick="switchSection(3)">Next: Section 3 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 3 ===================== -->
+  <div class="section-panel" id="panel3">
+    <div class="section-header">
+      <div class="section-badge">Section 3 · General Interest</div>
+      <div class="section-title">The Urban Green Revolution: How City Parks Transformed Public Life</div>
+      <div class="section-subtitle">Read the passage and answer Questions 28–40 · Long text, general interest</div>
+    </div>
+    <div class="section-body">
+
+      <div class="passage-box">
+        <p><strong>A.</strong> For much of history, urban life and nature existed in opposition. Cities were places of commerce, density, and noise — not greenery and birdsong. Yet over the past two centuries, a quiet revolution transformed this relationship. The deliberate creation of public parks reshaped not only the physical landscape of cities but also the social and psychological lives of their inhabitants. Today, urban green spaces are recognised as essential infrastructure, as vital to a healthy city as roads, hospitals, or schools.</p>
+
+        <p><strong>B.</strong> The modern public park as we know it emerged in the nineteenth century, largely as a response to the rapid and often chaotic industrialisation of European and North American cities. As factories multiplied and urban populations swelled, conditions in working-class districts became increasingly grim. Streets were crowded, housing was cramped, and air quality deteriorated sharply. Social reformers, physicians, and politicians began to argue that access to open air and greenery was not a luxury but a public health necessity. In Britain, reformers such as Joseph Paxton championed the creation of parks for the urban poor, leading to the development of spaces such as Birkenhead Park in 1847 — a park so influential that American landscape architect Frederick Law Olmsted visited it and later cited it as the inspiration for New York's Central Park.</p>
+
+        <p><strong>C.</strong> The design philosophies behind these early parks varied considerably. Some, like Birkenhead and Central Park, embraced a naturalistic approach — winding pathways, undulating lawns, and carefully positioned trees that gave the impression of natural countryside within an urban setting. Others adopted a more formal, geometric style, with symmetrical flowerbeds, straight avenues, and ornamental fountains. In France, the grand redesign of Paris under Baron Haussmann incorporated parks as deliberate civic showpieces — places that expressed municipal pride and civic order rather than wild nature. These different approaches reflected deeper debates about the purpose of public space: Was it to provide escape and tranquillity? To project civic power? Or simply to improve sanitation and public health?</p>
+
+        <p><strong>D.</strong> As the twentieth century progressed, the role of the city park evolved in response to changing social attitudes and urban needs. During the post-war period, many parks in western cities fell into neglect. Reduced municipal budgets, shifting priorities, and, in some cases, the departure of affluent residents to suburbs left parks underfunded and underused. Vandalism increased, maintenance declined, and many parks gained reputations as unsafe places. In some American cities, this reached a crisis point by the 1970s and 1980s, with parks becoming associated with crime and social disorder.</p>
+
+        <p><strong>E.</strong> The revitalisation of urban parks from the late 1980s onward was driven by a combination of factors. Changing attitudes toward the environment, increased awareness of physical and mental health benefits, and growing evidence linking green space to well-being all played a role. Cities began to invest once again in parks as strategic assets rather than costly liabilities. In New York, the formation of the Central Park Conservancy in 1980 marked a turning point: a public-private partnership model that transformed a neglected green space into one of the world's most visited urban parks. Similar models were replicated in cities across Europe and beyond.</p>
+
+        <p><strong>F.</strong> The scientific case for urban green space has strengthened considerably in recent decades. Research consistently shows that access to parks and green areas is associated with lower levels of stress, reduced symptoms of anxiety and depression, and improved physical health outcomes through increased exercise. Studies in the United Kingdom have found that people living within 300 metres of a quality green space report significantly higher levels of wellbeing than those without such access. Moreover, green spaces provide broader ecological benefits: trees in parks absorb carbon dioxide, reduce the urban heat island effect, manage stormwater, and provide habitat for urban wildlife. A study in Tokyo estimated that the city's parks prevent temperatures from rising by up to 2°C in surrounding areas during summer months.</p>
+
+        <p><strong>G.</strong> Yet despite this growing body of evidence, urban green spaces remain unevenly distributed. In many cities, the most affluent neighbourhoods have significantly better access to high-quality parks than poorer areas. This phenomenon — sometimes referred to as "green gentrification" — raises difficult questions. When parks improve, surrounding property values tend to rise, often pushing out the lower-income communities that the parks were originally meant to serve. Urban planners and policymakers are increasingly grappling with how to expand and improve green space access equitably, without triggering cycles of displacement.</p>
+
+        <p><strong>H.</strong> Looking ahead, the future of urban parks is likely to be shaped by climate change, growing urban populations, and the integration of new technologies. "Biophilic design" — an approach that seeks to embed nature throughout the built environment, not just in designated parks — is gaining traction. Green roofs, living walls, urban forests, and pocket parks are being incorporated into city planning in ways that were unimaginable a century ago. Some planners speak of transforming entire cities into green infrastructure, blurring the boundary between park and city itself. Whatever form they take, it seems clear that green spaces will continue to occupy a central place in the story of how cities evolve — and how their residents live.</p>
+      </div>
+
+      <!-- Q28–34: Matching Headings -->
+      <div class="instruction-box">
+        <strong>Questions 28–34 · Matching Headings</strong>
+        The passage has eight paragraphs labelled A–H. Choose the correct heading for paragraphs <strong>B–H</strong> from the list below. Write the correct Roman numeral (i–x) in the boxes. <em>There are more headings than paragraphs, so you will not use all of them.</em>
+      </div>
+
+      <div class="passage-box" style="font-size:0.87rem;padding:14px 18px;">
+        <strong>List of Headings</strong><br>
+        <strong>i</strong> Health and environmental benefits of green spaces<br>
+        <strong>ii</strong> The unequal distribution of parks across city neighbourhoods<br>
+        <strong>iii</strong> Origins of the public park in industrial cities<br>
+        <strong>iv</strong> Future directions in urban green design<br>
+        <strong>v</strong> A period of decline and urban neglect<br>
+        <strong>vi</strong> How different nations fund their parks<br>
+        <strong>vii</strong> Competing visions for park design<br>
+        <strong>viii</strong> The recovery of parks through new partnerships<br>
+        <strong>ix</strong> The relationship between parks and tourism revenue<br>
+        <strong>x</strong> The connection between nature and early urban settlements
+      </div>
+
+      <div class="questions-wrap">
+        <div class="question-item" id="qi28">
+          <div class="q-label">Question 28</div>
+          <div class="q-text">Paragraph B</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q28" value="iii"> iii – Origins of the public park in industrial cities</label>
+            <label class="option-label"><input type="radio" name="q28" value="vii"> vii – Competing visions for park design</label>
+            <label class="option-label"><input type="radio" name="q28" value="x"> x – The connection between nature and early urban settlements</label>
+            <label class="option-label"><input type="radio" name="q28" value="vi"> vi – How different nations fund their parks</label>
+          </div>
+          <div class="feedback-box" id="fb28"></div>
+        </div>
+        <div class="question-item" id="qi29">
+          <div class="q-label">Question 29</div>
+          <div class="q-text">Paragraph C</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q29" value="i"> i – Health and environmental benefits</label>
+            <label class="option-label"><input type="radio" name="q29" value="vii"> vii – Competing visions for park design</label>
+            <label class="option-label"><input type="radio" name="q29" value="viii"> viii – The recovery of parks through new partnerships</label>
+            <label class="option-label"><input type="radio" name="q29" value="iv"> iv – Future directions in urban green design</label>
+          </div>
+          <div class="feedback-box" id="fb29"></div>
+        </div>
+        <div class="question-item" id="qi30">
+          <div class="q-label">Question 30</div>
+          <div class="q-text">Paragraph D</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q30" value="ii"> ii – Unequal distribution of parks</label>
+            <label class="option-label"><input type="radio" name="q30" value="v"> v – A period of decline and urban neglect</label>
+            <label class="option-label"><input type="radio" name="q30" value="viii"> viii – The recovery of parks through new partnerships</label>
+            <label class="option-label"><input type="radio" name="q30" value="iii"> iii – Origins of the public park in industrial cities</label>
+          </div>
+          <div class="feedback-box" id="fb30"></div>
+        </div>
+        <div class="question-item" id="qi31">
+          <div class="q-label">Question 31</div>
+          <div class="q-text">Paragraph E</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q31" value="v"> v – A period of decline and urban neglect</label>
+            <label class="option-label"><input type="radio" name="q31" value="viii"> viii – The recovery of parks through new partnerships</label>
+            <label class="option-label"><input type="radio" name="q31" value="ix"> ix – The relationship between parks and tourism revenue</label>
+            <label class="option-label"><input type="radio" name="q31" value="i"> i – Health and environmental benefits</label>
+          </div>
+          <div class="feedback-box" id="fb31"></div>
+        </div>
+        <div class="question-item" id="qi32">
+          <div class="q-label">Question 32</div>
+          <div class="q-text">Paragraph F</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q32" value="i"> i – Health and environmental benefits of green spaces</label>
+            <label class="option-label"><input type="radio" name="q32" value="ii"> ii – Unequal distribution of parks</label>
+            <label class="option-label"><input type="radio" name="q32" value="iv"> iv – Future directions in urban green design</label>
+            <label class="option-label"><input type="radio" name="q32" value="vi"> vi – How different nations fund their parks</label>
+          </div>
+          <div class="feedback-box" id="fb32"></div>
+        </div>
+        <div class="question-item" id="qi33">
+          <div class="q-label">Question 33</div>
+          <div class="q-text">Paragraph G</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q33" value="iv"> iv – Future directions in urban green design</label>
+            <label class="option-label"><input type="radio" name="q33" value="ii"> ii – The unequal distribution of parks across city neighbourhoods</label>
+            <label class="option-label"><input type="radio" name="q33" value="ix"> ix – The relationship between parks and tourism</label>
+            <label class="option-label"><input type="radio" name="q33" value="v"> v – A period of decline and urban neglect</label>
+          </div>
+          <div class="feedback-box" id="fb33"></div>
+        </div>
+        <div class="question-item" id="qi34">
+          <div class="q-label">Question 34</div>
+          <div class="q-text">Paragraph H</div>
+          <div class="options-list">
+            <label class="option-label"><input type="radio" name="q34" value="viii"> viii – The recovery of parks through new partnerships</label>
+            <label class="option-label"><input type="radio" name="q34" value="iv"> iv – Future directions in urban green design</label>
+            <label class="option-label"><input type="radio" name="q34" value="i"> i – Health and environmental benefits</label>
+            <label class="option-label"><input type="radio" name="q34" value="x"> x – The connection between nature and early urban settlements</label>
+          </div>
+          <div class="feedback-box" id="fb34"></div>
+        </div>
+      </div>
+
+      <!-- Q35–40: Short Answer -->
+      <div class="instruction-box" style="margin-top:28px;">
+        <strong>Questions 35–40 · Short Answer Questions</strong>
+        Answer the questions below using <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.
+      </div>
+
+      <div class="questions-wrap">
+        <div class="question-item" id="qi35">
+          <div class="q-label">Question 35</div>
+          <div class="q-text">Which park did Frederick Law Olmsted visit that inspired his design for Central Park?</div>
+          <input type="text" class="text-input" id="ans35" placeholder="max 3 words...">
+          <div class="feedback-box" id="fb35"></div>
+        </div>
+        <div class="question-item" id="qi36">
+          <div class="q-label">Question 36</div>
+          <div class="q-text">In what year was the Central Park Conservancy formed?</div>
+          <input type="text" class="text-input" id="ans36" placeholder="max 3 words...">
+          <div class="feedback-box" id="fb36"></div>
+        </div>
+        <div class="question-item" id="qi37">
+          <div class="q-label">Question 37</div>
+          <div class="q-text">According to UK studies, how close does someone need to live to a quality green space to report higher wellbeing?</div>
+          <input type="text" class="text-input" id="ans37" placeholder="max 3 words...">
+          <div class="feedback-box" id="fb37"></div>
+        </div>
+        <div class="question-item" id="qi38">
+          <div class="q-label">Question 38</div>
+          <div class="q-text">By how much do Tokyo's parks help reduce surrounding temperatures in summer, according to a study?</div>
+          <input type="text" class="text-input" id="ans38" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb38"></div>
+        </div>
+        <div class="question-item" id="qi39">
+          <div class="q-label">Question 39</div>
+          <div class="q-text">What term is used in the passage to describe the problem of park improvements pushing out lower-income residents?</div>
+          <input type="text" class="text-input" id="ans39" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb39"></div>
+        </div>
+        <div class="question-item" id="qi40">
+          <div class="q-label">Question 40</div>
+          <div class="q-text">What design approach seeks to embed nature throughout the built environment, not just in designated parks?</div>
+          <input type="text" class="text-input" id="ans40" placeholder="max 2 words...">
+          <div class="feedback-box" id="fb40"></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="switchSection(2)">← Back: Section 2</button>
+        <button class="btn btn-gold" onclick="submitAll()">✓ Submit & See Score</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORE SCREEN -->
+  <div id="score-screen">
+    <div class="score-card">
+      <div class="score-header">
+        <h2>Your IELTS GT Reading Score</h2>
+        <span class="big-score" id="raw-score">–/40</span>
+        <p>Raw Score → Estimated Band</p>
+        <span class="band-score" id="band-display">Band –</span>
+      </div>
+      <div class="score-body">
+        <div class="score-grid">
+          <div class="score-cell"><div class="sc-num" id="s1-score">–</div><div class="sc-label">Section 1<br>Q1–14</div></div>
+          <div class="score-cell"><div class="sc-num" id="s2-score">–</div><div class="sc-label">Section 2<br>Q15–27</div></div>
+          <div class="score-cell"><div class="sc-num" id="s3-score">–</div><div class="sc-label">Section 3<br>Q28–40</div></div>
+        </div>
+        <div class="answer-key">
+          <h3>📋 Full Answer Key</h3>
+          <div class="ak-grid" id="ak-grid"></div>
+        </div>
+        <div class="nav-row" style="margin-top:28px;">
+          <button class="btn btn-secondary" onclick="restartTest()">↺ Restart Test</button>
+          <button class="btn btn-primary" onclick="switchSection(1)">Review Section 1</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==================== ANSWER KEY ====================
+const ANSWERS = {
+  // Section 1 – Matching
+  q1: 'E', q2: 'C', q3: 'B', q4: 'A', q5: 'B', q6: 'E',
+  // Section 1 – TFNG
+  q7: 'FALSE', q8: 'TRUE', q9: 'NOT GIVEN', q10: 'NOT GIVEN',
+  q11: 'TRUE', q12: 'TRUE', q13: 'FALSE', q14: 'FALSE',
+  // Section 2 – Sentence Completion
+  ans15: 'two-day', ans16: '48 hours', ans17: 'two years',
+  ans18: 'lunch', ans19: 'compulsory', ans20: 'first-come first-served',
+  ans21: '15 miles',
+  // Section 2 – TFNG
+  q22: 'NOT GIVEN', q23: 'FALSE', q24: 'FALSE', q25: 'TRUE',
+  q26: 'TRUE', q27: 'FALSE',
+  // Section 3 – Headings
+  q28: 'iii', q29: 'vii', q30: 'v', q31: 'viii',
+  q32: 'i', q33: 'ii', q34: 'iv',
+  // Section 3 – Short Answer
+  ans35: 'birkenhead park', ans36: '1980', ans37: '300 metres',
+  ans38: '2°c', ans39: 'green gentrification', ans40: 'biophilic design'
+};
+
+// Accepted alternatives
+const ALT_ANSWERS = {
+  ans15: ['two day', '2-day', '2 day'],
+  ans18: ['30-minute lunch', 'lunch break'],
+  ans20: ['first come first served', 'first-come, first-served'],
+  ans35: ['birkenhead'],
+  ans36: ['nineteen eighty'],
+  ans37: ['300m'],
+  ans38: ['2 degrees', '2°C', '2 degrees celsius'],
+  ans39: ['gentrification'],
+  ans40: ['biophilic']
+};
+
+// ==================== TIMER ====================
+let totalSeconds = 3600;
+let timerInterval = setInterval(() => {
+  totalSeconds--;
+  const m = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
+  const s = (totalSeconds % 60).toString().padStart(2,'0');
+  document.getElementById('timer').textContent = `${m}:${s}`;
+  if (totalSeconds <= 300) document.getElementById('timer').classList.add('urgent');
+  if (totalSeconds <= 0) { clearInterval(timerInterval); submitAll(); }
+}, 1000);
+
+// ==================== SECTION SWITCHING ====================
+function switchSection(n) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(`panel${n}`).classList.add('active');
+  document.getElementById(`tab${n}`).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ==================== TFNG SELECTION ====================
+function selectTFNG(btn) {
+  const q = btn.dataset.q;
+  document.querySelectorAll(`[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  updateProgress();
+}
+
+// ==================== RADIO SELECTION HIGHLIGHT ====================
+document.addEventListener('change', (e) => {
+  if (e.target.type === 'radio') {
+    const name = e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.closest('.option-label').classList.remove('selected');
+    });
+    e.target.closest('.option-label').classList.add('selected');
+    updateProgress();
+  }
+});
+document.addEventListener('input', (e) => {
+  if (e.target.classList.contains('text-input')) updateProgress();
+});
+
+// ==================== PROGRESS ====================
+function updateProgress() {
+  let answered = 0;
+  // radios
+  for (let i=1;i<=6;i++) { if (document.querySelector(`input[name="q${i}"]:checked`)) answered++; }
+  for (let i=28;i<=34;i++) { if (document.querySelector(`input[name="q${i}"]:checked`)) answered++; }
+  // TFNG
+  [7,8,9,10,11,12,13,14,22,23,24,25,26,27].forEach(i => {
+    if (document.querySelector(`[data-q="${i}"].selected`)) answered++;
+  });
+  // text
+  [15,16,17,18,19,20,21,35,36,37,38,39,40].forEach(i => {
+    if (document.getElementById(`ans${i}`) && document.getElementById(`ans${i}`).value.trim()) answered++;
+  });
+  document.getElementById('progress-fill').style.width = `${(answered/40)*100}%`;
+}
+
+// ==================== SUBMIT ====================
+function submitAll() {
+  clearInterval(timerInterval);
+
+  let correct = 0;
+  let s1=0, s2=0, s3=0;
+
+  // Collect answers
+  const userAnswers = {};
+
+  // Radio Q1-6
+  for(let i=1;i<=6;i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    userAnswers[`q${i}`] = sel ? sel.value : '';
+  }
+  // TFNG Q7-14
+  [7,8,9,10,11,12,13,14].forEach(i => {
+    const btn = document.querySelector(`[data-q="${i}"].selected`);
+    userAnswers[`q${i}`] = btn ? btn.dataset.v : '';
+  });
+  // Text Q15-21
+  [15,16,17,18,19,20,21].forEach(i => {
+    userAnswers[`ans${i}`] = document.getElementById(`ans${i}`) ? document.getElementById(`ans${i}`).value.trim() : '';
+  });
+  // TFNG Q22-27
+  [22,23,24,25,26,27].forEach(i => {
+    const btn = document.querySelector(`[data-q="${i}"].selected`);
+    userAnswers[`q${i}`] = btn ? btn.dataset.v : '';
+  });
+  // Radio Q28-34
+  for(let i=28;i<=34;i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    userAnswers[`q${i}`] = sel ? sel.value : '';
+  }
+  // Text Q35-40
+  [35,36,37,38,39,40].forEach(i => {
+    userAnswers[`ans${i}`] = document.getElementById(`ans${i}`) ? document.getElementById(`ans${i}`).value.trim() : '';
+  });
+
+  function checkAns(key, user) {
+    const correct_ans = ANSWERS[key].toLowerCase().trim();
+    const user_ans = user.toLowerCase().trim();
+    if (user_ans === correct_ans) return true;
+    if (ALT_ANSWERS[key]) {
+      return ALT_ANSWERS[key].some(a => a.toLowerCase() === user_ans);
+    }
+    return false;
+  }
+
+  // Build answer key grid
+  const akGrid = document.getElementById('ak-grid');
+  akGrid.innerHTML = '';
+
+  const allKeys = [
+    ...['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14'],
+    ...['ans15','ans16','ans17','ans18','ans19','ans20','ans21'],
+    ...['q22','q23','q24','q25','q26','q27'],
+    ...['q28','q29','q30','q31','q32','q33','q34'],
+    ...['ans35','ans36','ans37','ans38','ans39','ans40']
+  ];
+
+  const qLabels = {
+    q1:'1',q2:'2',q3:'3',q4:'4',q5:'5',q6:'6',q7:'7',q8:'8',q9:'9',q10:'10',
+    q11:'11',q12:'12',q13:'13',q14:'14',
+    ans15:'15',ans16:'16',ans17:'17',ans18:'18',ans19:'19',ans20:'20',ans21:'21',
+    q22:'22',q23:'23',q24:'24',q25:'25',q26:'26',q27:'27',
+    q28:'28',q29:'29',q30:'30',q31:'31',q32:'32',q33:'33',q34:'34',
+    ans35:'35',ans36:'36',ans37:'37',ans38:'38',ans39:'39',ans40:'40'
+  };
+
+  let idx = 0;
+  allKeys.forEach(key => {
+    idx++;
+    const user = userAnswers[key] || '';
+    const isCorrect = checkAns(key, user);
+    if (isCorrect) {
+      correct++;
+      if (idx<=14) s1++;
+      else if (idx<=27) s2++;
+      else s3++;
+    }
+
+    const item = document.createElement('div');
+    item.className = `ak-item ${isCorrect ? 'ak-correct' : 'ak-incorrect'}`;
+    item.innerHTML = `<span class="ak-q">Q${qLabels[key]}</span><span class="ak-ans">${ANSWERS[key]}</span>${!isCorrect ? `<span class="ak-user">✗ ${user||'–'}</span>` : '<span style="color:var(--correct)">✓</span>'}`;
+    akGrid.appendChild(item);
+  });
+
+  // Band estimation
+  const bands = [
+    [40,9.0],[39,8.5],[37,8.0],[35,7.5],[33,7.0],[30,6.5],[27,6.0],[23,5.5],[19,5.0],[15,4.5],[12,4.0],[9,3.5]
+  ];
+  let band = '3.0';
+  for (const [score, b] of bands) {
+    if (correct >= score) { band = b.toFixed(1); break; }
+  }
+
+  document.getElementById('raw-score').textContent = `${correct}/40`;
+  document.getElementById('band-display').textContent = `Band ${band}`;
+  document.getElementById('s1-score').textContent = `${s1}/14`;
+  document.getElementById('s2-score').textContent = `${s2}/13`;
+  document.getElementById('s3-score').textContent = `${s3}/13`;
+
+  // Hide panels, show score
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('score-screen').style.display = 'block';
+  document.getElementById('progress-fill').style.width = '100%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restartTest() {
+  location.reload();
+}
+</script>
+</body>
+</html>
